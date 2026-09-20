@@ -48,16 +48,18 @@ body,
   transition: transform 650ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* Just the top of the head crosses the corner. */
+/* Just the top of the head crosses the corner. Percentages are relative to
+   the sprite's own (now tightly-cropped, no transparent padding) box, so
+   these directly control how much of the actual character shows. */
 .overlay-anchor[data-stage="peek"] .overlay-creature-inner {
-  transform: translate(32%, 36%);
+  transform: translate(52%, 55%);
 }
 
 /* Face + upper body visible — the shell/body is still partly cut off by
    the screen edge on purpose (spec: don't fit the whole character inside
    the screen, or it stops reading as "emerging from outside"). */
 .overlay-anchor[data-stage="full"] .overlay-creature-inner {
-  transform: translate(14%, 8%);
+  transform: translate(6%, 4%);
 }
 
 .overlay-creature {
