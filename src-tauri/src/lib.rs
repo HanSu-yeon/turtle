@@ -51,6 +51,14 @@ pub fn run() {
                     let _ = overlay.set_position(*monitor.position());
                 }
                 let _ = overlay.set_ignore_cursor_events(true);
+                // Resizing/repositioning right after creation has been observed to
+                // leave the window never actually ordered onto the screen on macOS
+                // (its WebView keeps rendering — visible to per-window capture APIs
+                // regardless of on-screen state — but nothing is composited for the
+                // user to see). Re-assert on-top + visible explicitly so it actually
+                // gets drawn.
+                let _ = overlay.set_always_on_top(true);
+                let _ = overlay.show();
             }
 
             Ok(())
