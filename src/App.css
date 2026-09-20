@@ -26,6 +26,11 @@ body {
   font-size: 13px;
 }
 
+.tray-notice {
+  color: #ffd23f !important;
+  margin-top: -12px !important;
+}
+
 .app-body {
   display: flex;
   gap: 24px;
