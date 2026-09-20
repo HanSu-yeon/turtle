@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Turtle",
+  "productName": "꼬북이",
   "version": "0.1.0",
   "identifier": "com.hansuyeon.turtle",
   "build": {
@@ -14,7 +14,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "꼬북이 — Debug",
+        "title": "꼬북이",
         "width": 1000,
         "height": 750
       },

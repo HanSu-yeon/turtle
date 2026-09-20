@@ -34,6 +34,7 @@ function App() {
   const [baseline, setBaseline] = useState<PostureBaseline | null>(() => loadBaseline());
   const [sensitivityKey, setSensitivityKey] = useState<Sensitivity["key"]>("normal");
   const [alertAfterMs, setAlertAfterMs] = useState(5000);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const sensitivity = SENSITIVITY_PRESETS[sensitivityKey];
 
   const postureState = usePostureState(metrics, baseline, sensitivity, alertAfterMs);
@@ -50,11 +51,10 @@ function App() {
   return (
     <main className="app">
       <header className="app-header">
-        <h1>🐢 꼬북이 — Phase 4 Debug</h1>
+        <h1>🐢 꼬북이</h1>
         <p>
-          Webcam + pose landmarks + calibration + posture scoring + background/tray + click-through overlay
-          (no bubble/buttons — the character appearing/disappearing IS the notification). Closing this window
-          keeps 꼬북이 running — reopen it from the menu bar icon.
+          카메라로 자세를 확인하고, 목이 앞으로 나오면 화면 오른쪽 아래에 꼬북이가 나타나요. 이 창을 닫아도 꼬북이는
+          계속 지켜보고 있어요 — 메뉴바 아이콘에서 다시 열 수 있어요.
         </p>
         {!trayDetectionEnabled && (
           <p className="tray-notice">메뉴바에서 자세 감지가 꺼져 있어요. 감지를 다시 켜려면 트레이 메뉴를 확인하세요.</p>
@@ -70,14 +70,14 @@ function App() {
 
           <div className="camera-controls">
             {!isStreaming ? (
-              <button onClick={start}>{cameraStatus === "requesting" ? "Requesting…" : "Start camera"}</button>
+              <button onClick={start}>{cameraStatus === "requesting" ? "요청 중…" : "카메라 켜기"}</button>
             ) : (
-              <button onClick={stop}>Stop camera</button>
+              <button onClick={stop}>카메라 끄기</button>
             )}
             {cameraStatus === "denied" && (
               <p className="camera-error">
-                Camera permission was denied. Allow camera access for Turtle in System Settings → Privacy &amp;
-                Security → Camera, then try again.
+                카메라 권한이 거부됐어요. 시스템 설정 → 개인정보 보호 및 보안 → 카메라에서 꼬북이를 허용한 뒤 다시
+                시도해주세요.
               </p>
             )}
             {cameraStatus === "error" && cameraError && <p className="camera-error">{cameraError}</p>}
@@ -99,21 +99,26 @@ function App() {
             onAlertAfterMsChange={setAlertAfterMs}
           />
 
-          <p className="debug-hint">
-            오버레이는 이 창과 별개로 자체 카메라를 켜서 항상 감지 중이에요 (다른 앱을 보고 있어도 반응하도록). 위 상태는 이 창만의
-            디버그용 감지 결과입니다.
-          </p>
+          <button className="advanced-toggle" onClick={() => setShowAdvanced((v) => !v)}>
+            {showAdvanced ? "개발자 정보 숨기기" : "개발자 정보 보기"}
+          </button>
         </div>
 
-        <div className="debug-column">
-          <DebugPanel
-            modelStatus={modelStatus}
-            modelError={modelError}
-            metrics={metrics}
-            lastInferenceMs={lastInferenceMs}
-          />
-          <OverlayEngineStatus />
-        </div>
+        {showAdvanced && (
+          <div className="debug-column">
+            <p className="debug-hint">
+              오버레이는 이 창과 별개로 자체 카메라를 켜서 항상 감지 중이에요 (다른 앱을 보고 있어도 반응하도록).
+              아래는 이 창만의 감지 결과예요.
+            </p>
+            <DebugPanel
+              modelStatus={modelStatus}
+              modelError={modelError}
+              metrics={metrics}
+              lastInferenceMs={lastInferenceMs}
+            />
+            <OverlayEngineStatus />
+          </div>
+        )}
       </div>
     </main>
   );

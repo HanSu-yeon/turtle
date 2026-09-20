@@ -24,26 +24,25 @@ function fmt(n: number, digits = 3) {
 export function DebugPanel({ modelStatus, modelError, metrics, lastInferenceMs }: DebugPanelProps) {
   return (
     <div className="debug-panel">
-      <h2>Debug</h2>
-      {row("Model status", modelStatus)}
+      <h2>이 창의 감지 상태</h2>
+      {row("모델 상태", modelStatus)}
       {modelError && <div className="debug-error">{modelError}</div>}
-      {row("Inference time", lastInferenceMs !== null ? `${fmt(lastInferenceMs, 1)} ms` : "—")}
-      {row("Confidence", metrics ? fmt(metrics.confidence) : "—")}
+      {row("추론 시간", lastInferenceMs !== null ? `${fmt(lastInferenceMs, 1)} ms` : "—")}
+      {row("신뢰도", metrics ? fmt(metrics.confidence) : "—")}
 
-      <h3>Raw landmarks (normalized)</h3>
-      {row("Nose", metrics ? `${fmt(metrics.nose.x)}, ${fmt(metrics.nose.y)}` : "—")}
-      {row("Face center", metrics ? `${fmt(metrics.faceCenter.x)}, ${fmt(metrics.faceCenter.y)}` : "—")}
-      {row("Shoulder center", metrics ? `${fmt(metrics.shoulderCenter.x)}, ${fmt(metrics.shoulderCenter.y)}` : "—")}
+      <h3>랜드마크 좌표 (정규화)</h3>
+      {row("코", metrics ? `${fmt(metrics.nose.x)}, ${fmt(metrics.nose.y)}` : "—")}
+      {row("얼굴 중심", metrics ? `${fmt(metrics.faceCenter.x)}, ${fmt(metrics.faceCenter.y)}` : "—")}
+      {row("어깨 중심", metrics ? `${fmt(metrics.shoulderCenter.x)}, ${fmt(metrics.shoulderCenter.y)}` : "—")}
 
-      <h3>Posture signals</h3>
-      {row("Ear distance (face size)", metrics ? fmt(metrics.earDistance) : "—")}
-      {row("Eye distance (face size)", metrics ? fmt(metrics.eyeDistance) : "—")}
-      {row("Head drop ratio", metrics ? fmt(metrics.headDropRatio) : "—")}
-      {row("Head lean ratio", metrics ? fmt(metrics.headLeanRatio) : "—")}
+      <h3>자세 신호</h3>
+      {row("귀 간격 (얼굴 크기)", metrics ? fmt(metrics.earDistance) : "—")}
+      {row("눈 간격 (얼굴 크기)", metrics ? fmt(metrics.eyeDistance) : "—")}
+      {row("고개 숙임 정도", metrics ? fmt(metrics.headDropRatio) : "—")}
+      {row("좌우 기울임 정도", metrics ? fmt(metrics.headLeanRatio) : "—")}
 
       <p className="debug-hint">
-        These four signals (face size, head drop, head lean, and raw position) are what Phase 2's baseline
-        calibration will diff against to compute a posture score.
+        이 네 가지 값(얼굴 크기, 고개 숙임, 좌우 기울임, 위치)을 기준 자세와 비교해서 자세 점수를 계산해요.
       </p>
     </div>
   );

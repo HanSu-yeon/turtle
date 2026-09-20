@@ -88,6 +88,22 @@ body {
   max-width: 480px;
 }
 
+.advanced-toggle {
+  margin-top: 16px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #3a3f3a;
+  background: transparent;
+  color: #9aa39a;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.advanced-toggle:hover {
+  border-color: #4c614c;
+  color: #eef2ee;
+}
+
 .calibration {
   margin-top: 16px;
   padding: 14px 16px;
