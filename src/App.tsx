@@ -42,7 +42,7 @@ function App() {
   return (
     <main className="app">
       <header className="app-header">
-        <h1>🐢 Turtle — Phase 3 Debug</h1>
+        <h1>🐢 꼬북이 — Phase 3 Debug</h1>
         <p>
           Webcam + pose landmarks + calibration + posture scoring + background/tray. Closing this window keeps
           Turtle running — reopen it from the menu bar icon.

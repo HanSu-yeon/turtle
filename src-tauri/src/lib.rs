@@ -16,7 +16,7 @@ pub fn run() {
                 .build(app)?;
             let show_window = MenuItem::with_id(app, "show", "창 보이기", true, None::<&str>)?;
             let separator = PredefinedMenuItem::separator(app)?;
-            let quit = MenuItem::with_id(app, "quit", "Turtle 종료", true, None::<&str>)?;
+            let quit = MenuItem::with_id(app, "quit", "꼬북이 종료", true, None::<&str>)?;
 
             let menu = Menu::with_items(app, &[&detection_toggle, &show_window, &separator, &quit])?;
 
@@ -43,7 +43,7 @@ pub fn run() {
             Ok(())
         })
         .on_window_event(|window, event| {
-            // Keep Turtle (and its webcam/pose-detection loop) running in the
+            // Keep 꼬북이 (and its webcam/pose-detection loop) running in the
             // background instead of quitting when the debug window is closed —
             // this is what lets the tray's "자세 감지" toggle mean anything.
             if window.label() == MAIN_WINDOW {
