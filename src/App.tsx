@@ -1,16 +1,17 @@
 import { useCallback, useRef, useState } from "react";
+import { emit } from "@tauri-apps/api/event";
 import { useCamera } from "./hooks/useCamera";
 import { usePostureDetection } from "./hooks/usePostureDetection";
 import { usePostureState } from "./hooks/usePostureState";
 import { useTrayDetectionToggle } from "./hooks/useTrayDetectionToggle";
-import { useOverlayBroadcast } from "./hooks/useOverlayBroadcast";
 import { PoseOverlay } from "./components/PoseOverlay";
 import { DebugPanel } from "./components/DebugPanel";
 import { Calibration } from "./components/Calibration";
 import { PostureStatus } from "./components/PostureStatus";
-import { OverlayTestPanel } from "./components/OverlayTestPanel";
 import { loadBaseline, saveBaseline, type PostureBaseline } from "./lib/postureBaseline";
 import { SENSITIVITY_PRESETS, type Sensitivity } from "./lib/postureScore";
+import { BASELINE_UPDATED_EVENT } from "./lib/overlayEvents";
+import { isTauriRuntime } from "./lib/tauriRuntime";
 import "./App.css";
 
 const VIDEO_WIDTH = 640;
@@ -35,11 +36,14 @@ function App() {
   const sensitivity = SENSITIVITY_PRESETS[sensitivityKey];
 
   const postureState = usePostureState(metrics, baseline, sensitivity, alertAfterMs);
-  useOverlayBroadcast(postureState);
 
   const handleCalibrationComplete = useCallback((next: PostureBaseline) => {
     setBaseline(next);
     saveBaseline(next);
+    // The overlay window runs its own independent detection engine (see
+    // OverlayApp) — it needs to hear about a fresh calibration explicitly
+    // rather than re-reading localStorage on its own.
+    if (isTauriRuntime()) void emit(BASELINE_UPDATED_EVENT, next);
   }, []);
 
   return (
@@ -94,7 +98,10 @@ function App() {
             onAlertAfterMsChange={setAlertAfterMs}
           />
 
-          <OverlayTestPanel />
+          <p className="debug-hint">
+            오버레이는 이 창과 별개로 자체 카메라를 켜서 항상 감지 중이에요 (다른 앱을 보고 있어도 반응하도록). 위 상태는 이 창만의
+            디버그용 감지 결과입니다.
+          </p>
         </div>
 
         <DebugPanel
