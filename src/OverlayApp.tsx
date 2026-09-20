@@ -23,9 +23,12 @@ import "./OverlayApp.css";
 
 const SPRITES = { bad: badSprite, happy: happySprite };
 
-// Shown only for the happy/recovery moment — everything else stays
-// text-free per the "character IS the notification" design.
-const RECOVERY_MESSAGE = "목 피자~ 팔자 피자~ 🐢";
+// Only shown at the "full" stage (peek stays wordless per spec) — a plain
+// silhouette isn't always legible as "posture warning" on its own, so both
+// the bad and happy full reveals get a short speech-bubble caption.
+const BAD_MESSAGE = "목이 나왔어요! 👀";
+const RECOVERY_MESSAGE = "목 피자~ 팔자 피자~";
+const MESSAGES: Record<OverlayMood, string> = { bad: BAD_MESSAGE, happy: RECOVERY_MESSAGE };
 
 /**
  * This window is the actual posture-watching engine, not just a display.
@@ -119,8 +122,8 @@ function OverlayApp() {
       {/* Hidden — MediaPipe just needs a playing <video> element to read frames from. */}
       <video ref={videoRef} className="overlay-video" muted playsInline />
       <div className="overlay-creature-wrap" data-stage={display.stage}>
-        {display.mood === "happy" && display.stage === "full" && (
-          <p className="overlay-recovery-message">{RECOVERY_MESSAGE}</p>
+        {display.stage === "full" && (
+          <p className={`overlay-speech-bubble overlay-speech-bubble--${display.mood}`}>{MESSAGES[display.mood]}</p>
         )}
         <img src={SPRITES[display.mood]} alt="" className="overlay-creature" />
       </div>
