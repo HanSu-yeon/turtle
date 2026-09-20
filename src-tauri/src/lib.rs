@@ -5,6 +5,7 @@ use tauri::{
 };
 
 const MAIN_WINDOW: &str = "main";
+const OVERLAY_WINDOW: &str = "overlay";
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -39,6 +40,18 @@ pub fn run() {
                     _ => {}
                 })
                 .build(app)?;
+
+            // The overlay window covers the whole primary monitor so its React
+            // content can anchor the turtle card to the bottom-right corner
+            // with plain CSS instead of us having to track window geometry.
+            // It stays click-through so it never blocks the app underneath.
+            if let Some(overlay) = app.get_webview_window(OVERLAY_WINDOW) {
+                if let Ok(Some(monitor)) = overlay.primary_monitor() {
+                    let _ = overlay.set_size(*monitor.size());
+                    let _ = overlay.set_position(*monitor.position());
+                }
+                let _ = overlay.set_ignore_cursor_events(true);
+            }
 
             Ok(())
         })

@@ -3,10 +3,12 @@ import { useCamera } from "./hooks/useCamera";
 import { usePostureDetection } from "./hooks/usePostureDetection";
 import { usePostureState } from "./hooks/usePostureState";
 import { useTrayDetectionToggle } from "./hooks/useTrayDetectionToggle";
+import { useOverlayBroadcast } from "./hooks/useOverlayBroadcast";
 import { PoseOverlay } from "./components/PoseOverlay";
 import { DebugPanel } from "./components/DebugPanel";
 import { Calibration } from "./components/Calibration";
 import { PostureStatus } from "./components/PostureStatus";
+import { OverlayTestPanel } from "./components/OverlayTestPanel";
 import { loadBaseline, saveBaseline, type PostureBaseline } from "./lib/postureBaseline";
 import { SENSITIVITY_PRESETS, type Sensitivity } from "./lib/postureScore";
 import "./App.css";
@@ -33,6 +35,7 @@ function App() {
   const sensitivity = SENSITIVITY_PRESETS[sensitivityKey];
 
   const postureState = usePostureState(metrics, baseline, sensitivity, alertAfterMs);
+  useOverlayBroadcast(postureState);
 
   const handleCalibrationComplete = useCallback((next: PostureBaseline) => {
     setBaseline(next);
@@ -42,10 +45,10 @@ function App() {
   return (
     <main className="app">
       <header className="app-header">
-        <h1>🐢 꼬북이 — Phase 3 Debug</h1>
+        <h1>🐢 꼬북이 — Phase 4 Debug</h1>
         <p>
-          Webcam + pose landmarks + calibration + posture scoring + background/tray. Closing this window keeps
-          Turtle running — reopen it from the menu bar icon.
+          Webcam + pose landmarks + calibration + posture scoring + background/tray + overlay. Closing this
+          window keeps 꼬북이 running — reopen it from the menu bar icon.
         </p>
         {!trayDetectionEnabled && (
           <p className="tray-notice">메뉴바에서 자세 감지가 꺼져 있어요. 감지를 다시 켜려면 트레이 메뉴를 확인하세요.</p>
@@ -89,6 +92,8 @@ function App() {
             alertAfterMs={alertAfterMs}
             onAlertAfterMsChange={setAlertAfterMs}
           />
+
+          <OverlayTestPanel />
         </div>
 
         <DebugPanel

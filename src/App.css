@@ -199,6 +199,31 @@ body {
   color: #ffd23f;
 }
 
+.overlay-test-panel {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #3a3f3a;
+  background: #22261f;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.overlay-test-panel button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #4c614c;
+  background: #2f4a2f;
+  color: #eef2ee;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.overlay-test-panel button:hover {
+  background: #3a5c3a;
+}
+
 .debug-panel {
   flex: 1 1 280px;
   min-width: 260px;

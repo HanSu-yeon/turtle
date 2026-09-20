@@ -12,9 +12,24 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "꼬북이 — Debug",
         "width": 1000,
         "height": 750
+      },
+      {
+        "label": "overlay",
+        "title": "꼬북이",
+        "width": 400,
+        "height": 300,
+        "resizable": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "shadow": false,
+        "focus": false,
+        "visible": true
       }
     ],
     "security": {
