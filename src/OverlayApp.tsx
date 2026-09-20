@@ -86,7 +86,14 @@ function OverlayApp() {
 
       if (stage !== "idle") wasShownForBadRef.current = true;
       setDisplay((prev) => (prev.stage === stage && prev.mood === "bad" ? prev : { stage, mood: "bad" }));
-    } else if (wasShownForBadRef.current && recoveryTimeoutRef.current === null) {
+    } else if (
+      postureState.smoothedState === "GOOD" &&
+      wasShownForBadRef.current &&
+      recoveryTimeoutRef.current === null
+    ) {
+      // Only a real recovery to GOOD dismisses the character — bouncing
+      // through WARNING on the way there previously triggered this too,
+      // which made the character vanish after only a partial correction.
       setDisplay({ stage: "full", mood: "happy" });
       recoveryTimeoutRef.current = window.setTimeout(() => {
         wasShownForBadRef.current = false;

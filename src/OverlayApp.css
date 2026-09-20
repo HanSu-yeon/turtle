@@ -50,7 +50,7 @@ body,
 
 /* Just the top of the head crosses the corner. */
 .overlay-anchor[data-stage="peek"] .overlay-creature-inner {
-  transform: translate(58%, 60%);
+  transform: translate(32%, 36%);
 }
 
 /* Face + upper body visible — the shell/body is still partly cut off by
@@ -70,8 +70,9 @@ body,
 
 .overlay-speech-bubble {
   position: absolute;
-  bottom: 58%;
-  right: 70%;
+  top: 4%;
+  right: 100%;
+  margin-right: 12px;
   display: flex;
   flex-direction: column;
   padding: 7px 14px;
@@ -89,19 +90,17 @@ body,
   color: #3c4033;
 }
 
-/* Tail pointing down-right, toward the character's face. */
+/* Tail pointing right, toward the character's face. */
 .overlay-speech-bubble::after {
   content: "";
   position: absolute;
-  bottom: -6px;
-  right: 20px;
+  top: 55%;
+  right: -5px;
   width: 11px;
   height: 11px;
   background: inherit;
-  border-right: inherit;
-  border-bottom: inherit;
-  transform: rotate(45deg);
-  border-radius: 0 0 3px 0;
+  transform: translateY(-50%) rotate(45deg);
+  border-radius: 0 3px 0 0;
 }
 
 .overlay-speech-bubble--happy {

@@ -9,4 +9,4 @@ export type OverlayMood = "bad" | "happy";
 // it. Easy to retune here if it overshoots the other way.
 export const PEEK_MS = 1200;
 export const FULL_MS = 4000;
-export const HAPPY_HOLD_MS = 1500;
+export const HAPPY_HOLD_MS = 2200;
