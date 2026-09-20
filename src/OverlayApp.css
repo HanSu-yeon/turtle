@@ -5,15 +5,11 @@
   font-display: swap;
 }
 
-html,
-body,
-#root {
-  background: transparent;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
+/* html/body/#root transparency + overflow are set imperatively in
+   OverlayApp.tsx (a useEffect on mount/unmount), not here — both App.tsx
+   and OverlayApp.tsx are statically imported into every window now (see
+   main.tsx), so a bare `html, body, #root` rule here would apply to the
+   main debug window too, same leak as before just via a different path. */
 
 .overlay-stage {
   position: fixed;

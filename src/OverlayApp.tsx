@@ -41,6 +41,27 @@ const MESSAGES: Record<OverlayMood, string> = { bad: BAD_MESSAGE, happy: RECOVER
  * app was in front.
  */
 function OverlayApp() {
+  // App.tsx and OverlayApp.tsx are both statically imported into every
+  // window (see main.tsx), so a plain CSS rule targeting html/body/#root
+  // would leak into the main window too. Apply/undo it imperatively
+  // instead, scoped to exactly when this component is actually mounted.
+  useEffect(() => {
+    const targets = [document.documentElement, document.body, document.getElementById("root")].filter(
+      (el): el is HTMLElement => el !== null,
+    );
+    const previous = targets.map((el) => ({ background: el.style.background, overflow: el.style.overflow }));
+    targets.forEach((el) => {
+      el.style.background = "transparent";
+      el.style.overflow = "hidden";
+    });
+    return () => {
+      targets.forEach((el, i) => {
+        el.style.background = previous[i].background;
+        el.style.overflow = previous[i].overflow;
+      });
+    };
+  }, []);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const { status: cameraStatus, start } = useCamera(videoRef);
   const isStreaming = cameraStatus === "streaming";

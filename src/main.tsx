@@ -1,26 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { getCurrentWindow } from "@tauri-apps/api/window";
+import App from "./App";
+import OverlayApp from "./OverlayApp";
 import { isTauriRuntime } from "./lib/tauriRuntime";
 
-// Dynamic imports so each window only ever loads ONE of App/OverlayApp (and
-// therefore only one of App.css/OverlayApp.css) into its JS context. A
-// static import of both here previously leaked OverlayApp.css's global
-// html/body/#root rules (transparent background, overflow:hidden) into the
-// main debug window too, turning its dark theme white and killing scroll.
-async function main() {
-  let isOverlay = false;
-  if (isTauriRuntime()) {
-    const { getCurrentWindow } = await import("@tauri-apps/api/window");
-    isOverlay = getCurrentWindow().label === "overlay";
-  }
+// Static imports on purpose — an earlier version used dynamic import() to
+// pick the component per-window, but that broke silently in the packaged
+// production build (the overlay window rendered nothing at all: no error,
+// just a blank page, because the custom tauri:// asset protocol doesn't
+// resolve Vite's code-split chunk the same way the dev server does). Both
+// App and OverlayApp always load now; each window renders only one of them.
+const isOverlay = isTauriRuntime() && getCurrentWindow().label === "overlay";
 
-  const { default: Root } = isOverlay ? await import("./OverlayApp") : await import("./App");
-
-  ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <React.StrictMode>
-      <Root />
-    </React.StrictMode>,
-  );
-}
-
-main();
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+  <React.StrictMode>{isOverlay ? <OverlayApp /> : <App />}</React.StrictMode>,
+);
