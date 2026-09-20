@@ -199,9 +199,15 @@ body {
   color: #ffd23f;
 }
 
-.debug-panel {
+.debug-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   flex: 1 1 280px;
   min-width: 260px;
+}
+
+.debug-panel {
   background: #22261f;
   border: 1px solid #3a3f3a;
   border-radius: 12px;

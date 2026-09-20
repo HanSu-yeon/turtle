@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { listen } from "@tauri-apps/api/event";
+import { emit, listen } from "@tauri-apps/api/event";
 // TODO: swap for the dedicated "목을 앞으로 길게 내민" (neck-stretched) sprite
 // once it's provided — warning.png (surprised face) is a placeholder stand-in.
 import badSprite from "./assets/turtle/warning.png";
@@ -18,6 +18,7 @@ import {
   type OverlayStage,
   type OverlayMood,
 } from "./lib/overlayEvents";
+import { OVERLAY_DEBUG_EVENT } from "./lib/overlayDebugEvent";
 import "./OverlayApp.css";
 
 const SPRITES = { bad: badSprite, happy: happySprite };
@@ -59,7 +60,7 @@ function OverlayApp() {
     };
   }, []);
 
-  const { metrics } = usePostureDetection(videoRef, detectionActive);
+  const { status: modelStatus, metrics } = usePostureDetection(videoRef, detectionActive);
   const postureState = usePostureState(metrics, baseline, SENSITIVITY_PRESETS.normal, FULL_MS);
 
   const [display, setDisplay] = useState<{ stage: OverlayStage; mood: OverlayMood }>({
@@ -97,6 +98,21 @@ function OverlayApp() {
     },
     [],
   );
+
+  // This window has no UI to look at, so this is the only way to see what
+  // it's actually doing — the main debug window listens and displays it.
+  useEffect(() => {
+    void emit(OVERLAY_DEBUG_EVENT, {
+      cameraStatus,
+      modelStatus,
+      hasBaseline: baseline !== null,
+      confidence: metrics?.confidence ?? null,
+      smoothedState: postureState.smoothedState,
+      badDurationMs: postureState.badDurationMs,
+      stage: display.stage,
+      mood: display.mood,
+    });
+  }, [cameraStatus, modelStatus, baseline, metrics, postureState, display]);
 
   return (
     <div className="overlay-stage">

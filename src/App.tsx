@@ -8,6 +8,7 @@ import { PoseOverlay } from "./components/PoseOverlay";
 import { DebugPanel } from "./components/DebugPanel";
 import { Calibration } from "./components/Calibration";
 import { PostureStatus } from "./components/PostureStatus";
+import { OverlayEngineStatus } from "./components/OverlayEngineStatus";
 import { loadBaseline, saveBaseline, type PostureBaseline } from "./lib/postureBaseline";
 import { SENSITIVITY_PRESETS, type Sensitivity } from "./lib/postureScore";
 import { BASELINE_UPDATED_EVENT } from "./lib/overlayEvents";
@@ -104,12 +105,15 @@ function App() {
           </p>
         </div>
 
-        <DebugPanel
-          modelStatus={modelStatus}
-          modelError={modelError}
-          metrics={metrics}
-          lastInferenceMs={lastInferenceMs}
-        />
+        <div className="debug-column">
+          <DebugPanel
+            modelStatus={modelStatus}
+            modelError={modelError}
+            metrics={metrics}
+            lastInferenceMs={lastInferenceMs}
+          />
+          <OverlayEngineStatus />
+        </div>
       </div>
     </main>
   );
