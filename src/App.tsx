@@ -1,8 +1,13 @@
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useCamera } from "./hooks/useCamera";
 import { usePostureDetection } from "./hooks/usePostureDetection";
+import { usePostureState } from "./hooks/usePostureState";
 import { PoseOverlay } from "./components/PoseOverlay";
 import { DebugPanel } from "./components/DebugPanel";
+import { Calibration } from "./components/Calibration";
+import { PostureStatus } from "./components/PostureStatus";
+import { loadBaseline, saveBaseline, type PostureBaseline } from "./lib/postureBaseline";
+import { SENSITIVITY_PRESETS, type Sensitivity } from "./lib/postureScore";
 import "./App.css";
 
 const VIDEO_WIDTH = 640;
@@ -17,11 +22,23 @@ function App() {
     isStreaming,
   );
 
+  const [baseline, setBaseline] = useState<PostureBaseline | null>(() => loadBaseline());
+  const [sensitivityKey, setSensitivityKey] = useState<Sensitivity["key"]>("normal");
+  const [alertAfterMs, setAlertAfterMs] = useState(5000);
+  const sensitivity = SENSITIVITY_PRESETS[sensitivityKey];
+
+  const postureState = usePostureState(metrics, baseline, sensitivity, alertAfterMs);
+
+  const handleCalibrationComplete = useCallback((next: PostureBaseline) => {
+    setBaseline(next);
+    saveBaseline(next);
+  }, []);
+
   return (
     <main className="app">
       <header className="app-header">
-        <h1>🐢 Turtle — Phase 1 Debug</h1>
-        <p>Webcam + pose landmark validation. No calibration or overlay yet.</p>
+        <h1>🐢 Turtle — Phase 2 Debug</h1>
+        <p>Webcam + pose landmarks + baseline calibration + posture scoring. No overlay/tray yet.</p>
       </header>
 
       <div className="app-body">
@@ -45,6 +62,22 @@ function App() {
             )}
             {cameraStatus === "error" && cameraError && <p className="camera-error">{cameraError}</p>}
           </div>
+
+          <Calibration
+            latestMetrics={metrics}
+            onComplete={handleCalibrationComplete}
+            disabled={!isStreaming}
+            hasBaseline={baseline !== null}
+          />
+
+          <PostureStatus
+            baseline={baseline}
+            state={postureState}
+            sensitivity={sensitivity}
+            onSensitivityChange={setSensitivityKey}
+            alertAfterMs={alertAfterMs}
+            onAlertAfterMsChange={setAlertAfterMs}
+          />
         </div>
 
         <DebugPanel

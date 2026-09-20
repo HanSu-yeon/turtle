@@ -83,6 +83,117 @@ body {
   max-width: 480px;
 }
 
+.calibration {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: #22261f;
+  border: 1px solid #3a3f3a;
+  border-radius: 10px;
+}
+
+.calibration button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #4c614c;
+  background: #2f4a2f;
+  color: #eef2ee;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.calibration-active {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.calibration-active p {
+  margin: 0;
+}
+
+.countdown-number {
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #ffd23f;
+}
+
+.posture-status {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #3a3f3a;
+  background: #22261f;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.posture-status--empty {
+  color: #9aa39a;
+  font-size: 13px;
+}
+
+.posture-status--warning {
+  border-color: #7a6b2a;
+  background: #2a2818;
+}
+
+.posture-status--bad {
+  border-color: #7a3a3a;
+  background: #2a1c1c;
+}
+
+.posture-state-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: #2f4a2f;
+  color: #9be29b;
+  margin-bottom: 10px;
+}
+
+.posture-status--warning .posture-state-badge {
+  background: #4a3f1a;
+  color: #ffd23f;
+}
+
+.posture-status--bad .posture-state-badge {
+  background: #4a1e1e;
+  color: #ff8a8a;
+}
+
+.posture-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #9aa39a;
+}
+
+.posture-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.posture-controls select {
+  background: #1a1d1a;
+  color: #eef2ee;
+  border: 1px solid #4c614c;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 12px;
+}
+
+.posture-alert {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #ffd23f;
+}
+
 .debug-panel {
   flex: 1 1 280px;
   min-width: 260px;
