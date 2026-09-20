@@ -1,0 +1,135 @@
+:root {
+  color-scheme: light dark;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #1a1d1a;
+  color: #eef2ee;
+}
+
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.app-header h1 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+.app-header p {
+  margin: 0 0 20px;
+  color: #9aa39a;
+  font-size: 13px;
+}
+
+.app-body {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.camera-pane {
+  flex: 0 0 auto;
+}
+
+.camera-frame {
+  position: relative;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #3a3f3a;
+}
+
+.camera-frame video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pose-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.camera-controls {
+  margin-top: 12px;
+}
+
+.camera-controls button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #4c614c;
+  background: #2f4a2f;
+  color: #eef2ee;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.camera-controls button:hover {
+  background: #3a5c3a;
+}
+
+.camera-error {
+  color: #ff8a8a;
+  font-size: 13px;
+  max-width: 480px;
+}
+
+.debug-panel {
+  flex: 1 1 280px;
+  min-width: 260px;
+  background: #22261f;
+  border: 1px solid #3a3f3a;
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+.debug-panel h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.debug-panel h3 {
+  margin: 16px 0 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9aa39a;
+}
+
+.debug-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 3px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.debug-label {
+  color: #9aa39a;
+}
+
+.debug-value {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.debug-error {
+  color: #ff8a8a;
+  font-size: 12px;
+  margin: 6px 0;
+}
+
+.debug-hint {
+  margin-top: 16px;
+  font-size: 12px;
+  color: #7d857d;
+  line-height: 1.4;
+}
