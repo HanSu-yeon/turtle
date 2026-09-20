@@ -10,16 +10,15 @@ export interface Sensitivity {
   badThreshold: number;
 }
 
-// Deviation score is a unitless blend of normalized signals. Weights favor
-// head-drop (looking down) and face-size growth (leaning toward the screen)
-// since those are the clearest turtle-neck signals from this landmark set;
-// sideways lean and raw position shift are secondary. Tuned empirically —
-// adjust here while testing against the debug panel, not by guessing blind.
+// Deviation score only reacts to signals that actually mean turtle-neck:
+// leaning toward the screen (face growing larger) and dropping the head.
+// headShift (raw position shift) and lean (sideways tilt) are still computed
+// below for the debug panel, but deliberately excluded from the score —
+// they fired on repositioning in the frame or tilting your head sideways,
+// neither of which is the "목이 나왔어요" this app is meant to catch.
 const WEIGHTS = {
-  headShift: 1.0,
   sizeRatio: 1.5,
   drop: 1.5,
-  lean: 0.5,
 };
 
 export const SENSITIVITY_PRESETS: Record<Sensitivity["key"], Sensitivity> = {
@@ -52,11 +51,7 @@ export function computeDeviation(
 
   // Only penalize leaning IN (sizeRatio > 1) and dropping DOWN (dropDelta > 0) —
   // sitting back further or tilting the head up isn't the problem this app watches for.
-  const score =
-    WEIGHTS.headShift * headShift +
-    WEIGHTS.sizeRatio * Math.max(0, sizeRatio - 1) +
-    WEIGHTS.drop * Math.max(0, dropDelta) +
-    WEIGHTS.lean * Math.abs(leanDelta);
+  const score = WEIGHTS.sizeRatio * Math.max(0, sizeRatio - 1) + WEIGHTS.drop * Math.max(0, dropDelta);
 
   const state: PostureState =
     score >= sensitivity.badThreshold ? "BAD" : score >= sensitivity.warningThreshold ? "WARNING" : "GOOD";
