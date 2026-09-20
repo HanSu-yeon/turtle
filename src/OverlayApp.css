@@ -42,9 +42,13 @@ body,
 .overlay-creature-inner {
   position: relative;
   display: inline-block;
-  /* idle baseline (unused visually since idle renders nothing, kept for
-     a consistent starting point if this ever transitions from idle). */
-  transform: translate(75%, 75%);
+  /* Idle must hide the ENTIRE sprite, including decorative bits (like the
+     "!" marks) that stick out past the head/body toward the top-left —
+     75% still left them peeking at the screen edge even with nothing
+     else visible. 140% clears the whole box with margin to spare, and
+     staying mounted (vs. unmounting on idle) is what makes the "slide
+     back out" transition happen instead of an instant pop. */
+  transform: translate(140%, 140%);
   transition: transform 650ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
@@ -52,7 +56,7 @@ body,
    the sprite's own (now tightly-cropped, no transparent padding) box, so
    these directly control how much of the actual character shows. */
 .overlay-anchor[data-stage="peek"] .overlay-creature-inner {
-  transform: translate(52%, 55%);
+  transform: translate(35%, 38%);
 }
 
 /* Face + upper body visible — the shell/body is still partly cut off by
@@ -72,9 +76,9 @@ body,
 
 .overlay-speech-bubble {
   position: absolute;
-  bottom: 100%;
+  bottom: 96%;
   left: 6%;
-  margin-bottom: 10px;
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
   padding: 7px 14px;
