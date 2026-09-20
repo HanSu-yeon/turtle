@@ -9,12 +9,13 @@ interface CalibrationProps {
   latestMetrics: PostureMetrics | null;
   onComplete: (baseline: PostureBaseline) => void;
   disabled: boolean;
-  hasBaseline: boolean;
+  baseline: PostureBaseline | null;
 }
 
 type Phase = "idle" | "countdown" | "capturing" | "done";
 
-export function Calibration({ latestMetrics, onComplete, disabled, hasBaseline }: CalibrationProps) {
+export function Calibration({ latestMetrics, onComplete, disabled, baseline }: CalibrationProps) {
+  const hasBaseline = baseline !== null;
   const [phase, setPhase] = useState<Phase>("idle");
   const [countdown, setCountdown] = useState(3);
   const samplesRef = useRef<PostureMetrics[]>([]);
@@ -60,9 +61,17 @@ export function Calibration({ latestMetrics, onComplete, disabled, hasBaseline }
   return (
     <div className="calibration">
       {phase === "idle" && (
-        <button onClick={start} disabled={disabled}>
-          {disabled ? "카메라를 먼저 켜주세요" : hasBaseline ? "기준 자세 다시 설정" : "기준 자세 설정하기"}
-        </button>
+        <>
+          {baseline && (
+            <p className="calibration-saved-notice">
+              ✅ 저장된 자세가 있어요 ({new Date(baseline.capturedAt).toLocaleDateString("ko-KR")} 측정) — 지금 이 기준으로
+              감지하고 있어요.
+            </p>
+          )}
+          <button onClick={start} disabled={disabled}>
+            {disabled ? "카메라를 먼저 켜주세요" : hasBaseline ? "재측정하기" : "기준 자세 설정하기"}
+          </button>
+        </>
       )}
       {phase === "countdown" && (
         <div className="calibration-active">

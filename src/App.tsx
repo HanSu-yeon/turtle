@@ -87,7 +87,7 @@ function App() {
             latestMetrics={metrics}
             onComplete={handleCalibrationComplete}
             disabled={!isStreaming}
-            hasBaseline={baseline !== null}
+            baseline={baseline}
           />
 
           <PostureStatus
@@ -115,6 +115,8 @@ function App() {
               modelError={modelError}
               metrics={metrics}
               lastInferenceMs={lastInferenceMs}
+              postureState={postureState}
+              sensitivity={sensitivity}
             />
             <OverlayEngineStatus />
           </div>

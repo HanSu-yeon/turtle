@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { PostureBaseline } from "../lib/postureBaseline";
 import { SENSITIVITY_PRESETS, type Sensitivity } from "../lib/postureScore";
 import type { PostureStateResult } from "../hooks/usePostureState";
@@ -11,10 +12,10 @@ interface PostureStatusProps {
   onAlertAfterMsChange: (ms: number) => void;
 }
 
-const STATE_LABEL: Record<string, string> = {
-  GOOD: "GOOD",
-  WARNING: "WARNING",
-  BAD: "BAD",
+const STATE_COPY: Record<string, { icon: string; label: string }> = {
+  GOOD: { icon: "🙂", label: "자세가 좋아요" },
+  WARNING: { icon: "😐", label: "목이 조금 나왔어요" },
+  BAD: { icon: "😣", label: "목이 많이 나왔어요" },
 };
 
 const ALERT_OPTIONS = [3000, 5000, 10000];
@@ -27,6 +28,8 @@ export function PostureStatus({
   alertAfterMs,
   onAlertAfterMsChange,
 }: PostureStatusProps) {
+  const [showSettings, setShowSettings] = useState(false);
+
   if (!baseline) {
     return (
       <div className="posture-status posture-status--empty">
@@ -35,66 +38,50 @@ export function PostureStatus({
     );
   }
 
-  const { deviation, smoothedState, badDurationMs, shouldAlert } = state;
+  const { smoothedState, shouldAlert } = state;
+  const copy = STATE_COPY[smoothedState ?? "GOOD"] ?? STATE_COPY.GOOD;
 
   return (
     <div className={`posture-status posture-status--${(smoothedState ?? "good").toLowerCase()}`}>
-      <div className="posture-state-badge">{smoothedState ? STATE_LABEL[smoothedState] : "—"}</div>
-
-      <div className="posture-controls">
-        <label>
-          감도
-          <select
-            value={sensitivity.key}
-            onChange={(e) => onSensitivityChange(e.target.value as Sensitivity["key"])}
-          >
-            {Object.values(SENSITIVITY_PRESETS).map((s) => (
-              <option key={s.key} value={s.key}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          알림까지
-          <select value={alertAfterMs} onChange={(e) => onAlertAfterMsChange(Number(e.target.value))}>
-            {ALERT_OPTIONS.map((ms) => (
-              <option key={ms} value={ms}>
-                {ms / 1000}초
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <div className="debug-row">
-        <span className="debug-label">Score</span>
-        <span className="debug-value">
-          {deviation ? deviation.score.toFixed(3) : "—"} (경고 {sensitivity.warningThreshold} / 나쁨{" "}
-          {sensitivity.badThreshold})
+      <div className="posture-state-badge" title={copy.label}>
+        <span className="posture-state-icon" role="img" aria-label={copy.label}>
+          {copy.icon}
         </span>
       </div>
-      <div className="debug-row">
-        <span className="debug-label">Head shift</span>
-        <span className="debug-value">{deviation ? deviation.headShift.toFixed(3) : "—"}</span>
-      </div>
-      <div className="debug-row">
-        <span className="debug-label">Size ratio</span>
-        <span className="debug-value">{deviation ? deviation.sizeRatio.toFixed(3) : "—"}</span>
-      </div>
-      <div className="debug-row">
-        <span className="debug-label">Drop delta</span>
-        <span className="debug-value">{deviation ? deviation.dropDelta.toFixed(3) : "—"}</span>
-      </div>
-      <div className="debug-row">
-        <span className="debug-label">Lean delta</span>
-        <span className="debug-value">{deviation ? deviation.leanDelta.toFixed(3) : "—"}</span>
-      </div>
-      <div className="debug-row">
-        <span className="debug-label">BAD 지속 시간</span>
-        <span className="debug-value">{(badDurationMs / 1000).toFixed(1)}s</span>
-      </div>
-      {shouldAlert && <div className="posture-alert">🐢 지금이면 거북이가 등장했을 시점이에요</div>}
+
+      {shouldAlert && <div className="posture-alert">🐢 지금이면 거북이가 화면에 나타났을 시점이에요</div>}
+
+      <button className="posture-settings-toggle" onClick={() => setShowSettings((v) => !v)}>
+        {showSettings ? "설정 닫기" : "설정 ⚙"}
+      </button>
+
+      {showSettings && (
+        <div className="posture-controls">
+          <label>
+            감도
+            <select
+              value={sensitivity.key}
+              onChange={(e) => onSensitivityChange(e.target.value as Sensitivity["key"])}
+            >
+              {Object.values(SENSITIVITY_PRESETS).map((s) => (
+                <option key={s.key} value={s.key}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            알림까지
+            <select value={alertAfterMs} onChange={(e) => onAlertAfterMsChange(Number(e.target.value))}>
+              {ALERT_OPTIONS.map((ms) => (
+                <option key={ms} value={ms}>
+                  {ms / 1000}초
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
     </div>
   );
 }
