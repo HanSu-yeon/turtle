@@ -72,9 +72,9 @@ body,
 
 .overlay-speech-bubble {
   position: absolute;
-  top: 4%;
-  right: 100%;
-  margin-right: 12px;
+  bottom: 100%;
+  left: 6%;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
   padding: 7px 14px;
@@ -92,17 +92,17 @@ body,
   color: #3c4033;
 }
 
-/* Tail pointing right, toward the character's face. */
+/* Tail pointing down, toward the character's head. */
 .overlay-speech-bubble::after {
   content: "";
   position: absolute;
-  top: 55%;
-  right: -5px;
+  top: 100%;
+  left: 28px;
   width: 11px;
   height: 11px;
   background: inherit;
   transform: translateY(-50%) rotate(45deg);
-  border-radius: 0 3px 0 0;
+  border-radius: 0 0 3px 0;
 }
 
 .overlay-speech-bubble--happy {
