@@ -47,8 +47,9 @@ function App() {
       <header className="app-header">
         <h1>🐢 꼬북이 — Phase 4 Debug</h1>
         <p>
-          Webcam + pose landmarks + calibration + posture scoring + background/tray + overlay. Closing this
-          window keeps 꼬북이 running — reopen it from the menu bar icon.
+          Webcam + pose landmarks + calibration + posture scoring + background/tray + click-through overlay
+          (no bubble/buttons — the character appearing/disappearing IS the notification). Closing this window
+          keeps 꼬북이 running — reopen it from the menu bar icon.
         </p>
         {!trayDetectionEnabled && (
           <p className="tray-notice">메뉴바에서 자세 감지가 꺼져 있어요. 감지를 다시 켜려면 트레이 메뉴를 확인하세요.</p>

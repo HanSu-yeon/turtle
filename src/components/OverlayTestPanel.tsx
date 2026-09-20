@@ -1,10 +1,10 @@
 import { emit } from "@tauri-apps/api/event";
 import { isTauriRuntime } from "../lib/tauriRuntime";
-import { OVERLAY_EVENT, WARNING_MESSAGE, HAPPY_MESSAGE, type OverlayPayload } from "../lib/overlayEvents";
+import { OVERLAY_EVENT, type OverlayPayload } from "../lib/overlayEvents";
 
-// Sustaining BAD posture for the full alert delay every time is slow to test
-// manually — this lets Phase 4's actual question ("does the overlay show up
-// over other apps?") get answered without waiting on the camera at all.
+// Sustaining BAD posture for a full 3-5s every time is slow to test manually
+// — this lets Phase 4's actual question ("does the overlay show up over
+// other apps?") get answered without waiting on the camera at all.
 export function OverlayTestPanel() {
   function send(payload: OverlayPayload) {
     void emit(OVERLAY_EVENT, payload);
@@ -16,13 +16,10 @@ export function OverlayTestPanel() {
 
   return (
     <div className="overlay-test-panel">
-      <button onClick={() => send({ visible: true, mood: "warning", message: WARNING_MESSAGE })}>
-        경고 오버레이 테스트
-      </button>
-      <button onClick={() => send({ visible: true, mood: "happy", message: HAPPY_MESSAGE })}>
-        칭찬 오버레이 테스트
-      </button>
-      <button onClick={() => send({ visible: false, mood: "happy", message: "" })}>오버레이 숨기기</button>
+      <button onClick={() => send({ stage: "peek", mood: "bad" })}>3초: 머리 빼꼼</button>
+      <button onClick={() => send({ stage: "full", mood: "bad" })}>5초: 크게 출몰</button>
+      <button onClick={() => send({ stage: "full", mood: "happy" })}>자세 교정: 웃음</button>
+      <button onClick={() => send({ stage: "idle", mood: "happy" })}>내려가기</button>
     </div>
   );
 }
